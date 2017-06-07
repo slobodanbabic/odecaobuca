@@ -1,11 +1,14 @@
 package gui;
 
+import java.util.List;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.JOptionPane;
 
 import beans.OdecaEjbTim4;
 import beans.OdecaTim4I;
+import entities.PredmetTim4;
 
 
 public class OdecaClient {
@@ -35,7 +38,9 @@ public class OdecaClient {
 		System.out.println(str);
 		if(client.remoteEjb.login("peki", "peki"))
 			System.out.println("uspesno sam se logovo");
-		
+		List<PredmetTim4> predmeti = client.remoteEjb.getSviPredmeti();
+		for(PredmetTim4 predmet :predmeti )
+			System.out.println(predmet.getOpis());
 
 	}
 

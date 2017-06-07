@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
@@ -17,22 +16,20 @@ import javax.persistence.OneToMany;
 @NamedQueries({
 	@NamedQuery(name="KorisnikTim4.getByUsername", query="SELECT k.username FROM KorisnikTim4 k WHERE k.username LIKE :username"),
 	@NamedQuery(name="KorisnikTim4.getByUserAndPass",query="SELECT k FROM KorisnikTim4 k WHERE k.username LIKE :username"
-			+ " AND k.password like :password"),
-	@NamedQuery(name="KorisnikTim4.getById",query="SELECT k FROM KorisnikTim4 k WHERE k.id LIKE :id")
+			+ " AND k.password like :password"),	
 	
 })
 public class KorisnikTim4 implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue
-	private int id;
+	private String username;
 	private String ime;
 	private String prezime;
 	private String email;
 	@Lob
 	private byte[] avatar;
-	private String username;
+	
 	private String password;	
 	
 	//svi oglasi koje je korisnik kreirao
@@ -51,14 +48,7 @@ public class KorisnikTim4 implements Serializable{
 		
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	
 	public String getIme() {
 		return ime;
 	}

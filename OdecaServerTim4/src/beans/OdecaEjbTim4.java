@@ -89,7 +89,7 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	public boolean ponudiCenu(int idOglasa, int novaCena) {
 		if(korisnik != null){
 			OglasTim4 oglas = em.find(OglasTim4.class, idOglasa);
-			if(oglas.getKorisnik().getId() != korisnik.getId()){
+			if(oglas.getKorisnik().getUsername() != korisnik.getUsername()){
 				if(oglas.getPonudjenaCena() < novaCena){
 					oglas.setPonudjenaCena(novaCena);
 					return true;
@@ -103,7 +103,7 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	public void zatvoriPonude(int idOglasa) {
 		if(korisnik !=null){
 			OglasTim4 oglas = em.find(OglasTim4.class, idOglasa);
-			if(oglas.getKorisnik().getId() == korisnik.getId())
+			if(oglas.getKorisnik().getUsername() == korisnik.getUsername())
 				oglas.setIstekao(true);
 		}
 		

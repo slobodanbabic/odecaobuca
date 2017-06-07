@@ -2,13 +2,14 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -21,7 +22,8 @@ public class KomentarTim4 implements Serializable{
 	private int id;
 	@Column(length=100)
 	private String komentar;
-	//private List<KomentarTim4>podKomentari;
+	@OneToMany
+	private List<KomentarTim4>podKomentari;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datum;
 	@ManyToOne
@@ -63,12 +65,12 @@ public class KomentarTim4 implements Serializable{
 	public void setKorisnik(KorisnikTim4 korisnik) {
 		this.korisnik = korisnik;
 	}
-	/*public List<KomentarTim4> getPodKomentari() {
+	public List<KomentarTim4> getPodKomentari() {
 		return podKomentari;
 	}
 	public void setPodKomentari(List<KomentarTim4> podKomentari) {
 		this.podKomentari = podKomentari;
-	}*/
+	}
 	public boolean isKomentarOglasa() {
 		return komentarOglasa;
 	}
