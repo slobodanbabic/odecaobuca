@@ -2,6 +2,7 @@ package beans;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -52,16 +53,15 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	}
 
 	@Override
-	public boolean login(String username, String password) {
+	public KorisnikTim4 login(String username, String password) {
 		TypedQuery<KorisnikTim4>q=em.createNamedQuery("KorisnikTim4.getByUserAndPass",KorisnikTim4.class);
 		q.setParameter("username", username);
 		q.setParameter("password", password);
 		try {
-			korisnik=q.getSingleResult();
+			return korisnik=q.getSingleResult();
 		} catch (NoResultException nre) {
-			return false;
+			return null;
 		}
-		return true;
 	}
 
 	@Override
@@ -205,6 +205,19 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();
 	}
+
+	@Override
+	public List<KategorijaTim4> getKategorije() {
+		return Arrays.asList(KategorijaTim4.values());
+	}
+
+	@Override
+	public List<String> getSveUniqueVelicineByKategorija(KategorijaTim4 kategorija) {
+		TypedQuery<String> q =em.createQuery("SELECT DISTINCT(p.velicina) FROM PredmetTim4 p where p.kategorija = :kategorija",String.class);
+		q.setParameter("kategorija", kategorija);
+		return q.getResultList();
+	}
+	
 
 	
 	

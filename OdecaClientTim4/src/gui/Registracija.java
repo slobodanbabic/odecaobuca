@@ -11,17 +11,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -37,7 +30,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import beans.OdecaEjbTim4;
 import beans.OdecaTim4I;
 import main.LoginScreen;
 
@@ -54,7 +46,7 @@ public class Registracija {
 	private String putanja;
 	private Icon avatar1Icon;
 
-	private OdecaTim4I remoteEjb;
+	private static OdecaTim4I remoteEjb;
 	private JTextField passwordVisibleField_1;
 
 	public Registracija() {
@@ -63,7 +55,7 @@ public class Registracija {
 		passwordField_1 = new JPasswordField();
 		avatar1Icon = new ImageIcon("avatar-default.png");
 		try {
-			remoteEjb = getRemote();
+			remoteEjb = Remote.getRemote();
 		} catch (NamingException ex) {
 			String msg = ex.getClass().getName() + ":\n" + ex.getMessage();
 			System.out.println(msg);
@@ -255,8 +247,7 @@ public class Registracija {
 		btnOdustani.setHorizontalAlignment(SwingConstants.RIGHT);
 		bot.add(btnOdustani);
 
-		final JLabel avatar1 = new JLabel("");
-		avatar1.setText("");
+		final JLabel avatar1 = new JLabel();
 		avatar1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -271,9 +262,9 @@ public class Registracija {
 					ImageIcon slika = new ImageIcon(path);
 					Image img = slika.getImage();
 					avatar1.setBounds(48, 205, 100, 100);
-					Image novaSlika = img.getScaledInstance(avatar1.getWidth(), avatar1.getHeight(),
+					img = img.getScaledInstance(avatar1.getWidth(), avatar1.getHeight(),
 							Image.SCALE_SMOOTH);
-					ImageIcon slicica = new ImageIcon(novaSlika);
+					ImageIcon slicica = new ImageIcon(img);
 					avatar1.setText("");
 					avatar1.setIcon(slicica);
 				}
@@ -327,10 +318,10 @@ public class Registracija {
 
 					byte[] niz = null;
 					try {
-						niz = fileToByteArray(putanja);
+						niz = SlikaKonverter.fileToByteArray(putanja);
 					} catch (FileNotFoundException e) {
 						try {
-							niz = extractBytes("avatar-default.png");
+							niz = SlikaKonverter.extractBytes("avatar-default.png");
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
@@ -353,38 +344,4 @@ public class Registracija {
 		frame.setVisible(true);
 	}
 
-	private byte[] fileToByteArray(String s) throws FileNotFoundException, IOException {
-		FileInputStream fis = new FileInputStream(s);
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		byte[] buf = new byte[255];
-		try {
-			for (int readNum; (readNum = fis.read(buf)) != -1;) {
-				bos.write(buf, 0, readNum);
-			}
-		} catch (IOException ex) {
-		}
-		return bos.toByteArray();
-	}
-
-	public byte[] extractBytes(String ImageName) throws IOException {
-		// open image
-		File imgPath = new File(ImageName);
-		BufferedImage bufferedImage = ImageIO.read(imgPath);
-
-		// get DataBufferBytes from Raster
-		WritableRaster raster = bufferedImage.getRaster();
-		DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
-
-		return (data.getData());
-	}
-
-	private OdecaTim4I getRemote() throws NamingException {
-		if (remoteEjb == null) {
-			InitialContext ctx = new InitialContext();
-			String name = "ejb:/OdecaServerTim4//" + OdecaEjbTim4.class.getSimpleName() + "!"
-					+ OdecaTim4I.class.getName() + "?stateful";
-			remoteEjb = (OdecaTim4I) ctx.lookup(name);
-		}
-		return remoteEjb;
-	}
 }

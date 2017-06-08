@@ -9,25 +9,24 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import beans.OdecaEjbTim4;
 import beans.OdecaTim4I;
+import entities.KorisnikTim4;
+import gui.OglasiProfil;
 import gui.Registracija;
+import gui.Remote;
 
 public class LoginScreen extends JFrame {
 
@@ -39,7 +38,7 @@ public class LoginScreen extends JFrame {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 
-	private OdecaTim4I remoteEjb;
+	private static OdecaTim4I remoteEjb;
 	private JTextField passwordVisibleField;
 
 	/**
@@ -64,7 +63,7 @@ public class LoginScreen extends JFrame {
 	public LoginScreen() {
 		setVisible(true);
 		try {
-		remoteEjb = getRemote();
+			remoteEjb = Remote.getRemote();
 		} catch(NamingException ex) {
 			String msg = ex.getClass().getName() + ":\n" + ex.getMessage();
 			System.out.println(msg);
@@ -116,10 +115,10 @@ public class LoginScreen extends JFrame {
 				lblMolimVasPopunite.setVisible(false);
 				String username = usernameField.getText();
 				String password = passwordCheckBox.isSelected() ? passwordVisibleField.getText() : new String(passwordField.getPassword());
-				boolean test = remoteEjb.login(username, password);
-				if (test) {
-					// instancirati odgovarajuci prozor na osnovu tipa
-					JOptionPane.showConfirmDialog(null, "radi baza");
+				KorisnikTim4 korisnik = remoteEjb.login(username, password);
+				if (korisnik != null) {
+					new OglasiProfil(korisnik);
+					setVisible(false);
 				} else {
 					lblMolimVasPopunite.setVisible(true);
 				}
@@ -195,13 +194,4 @@ public class LoginScreen extends JFrame {
 		
 	}
 
-	private OdecaTim4I getRemote() throws NamingException {
-		if (remoteEjb == null) {
-			InitialContext ctx = new InitialContext();
-			String name = "ejb:/OdecaServerTim4//" + OdecaEjbTim4.class.getSimpleName() + "!"
-					+ OdecaTim4I.class.getName() + "?stateful";
-			remoteEjb = (OdecaTim4I) ctx.lookup(name);
-		}
-		return remoteEjb;
-	}
 }
