@@ -9,6 +9,7 @@ import javax.ejb.Remote;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -28,13 +29,14 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 		private EntityManager em;
 
 	@Override
-	public String registracija(String ime, String prezime, String email, String username, String password,
+	public boolean registracija(String ime, String prezime, String email, String username, String password,
 			byte[] avatar) {
 		TypedQuery<String> q = em.createNamedQuery("KorisnikTim4.getByUsername", String.class);
 		q.setParameter("username", username);		
 		List<String> usernamel=q.getResultList();
 		if(usernamel.size() != 0)
-			return String.format("Korisnicko ime %s vec postoji u bazi! \nPokusajte sa drugim korisnickim imenom.", username);
+			return false;
+			//return String.format("Korisnicko ime %s vec postoji u bazi! \nPokusajte sa drugim korisnickim imenom.", username);
 		else{
 			KorisnikTim4 korisnik = new KorisnikTim4();
 			korisnik.setIme(ime);
@@ -44,7 +46,8 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 			korisnik.setPassword(password);
 			korisnik.setAvatar(avatar);
 			em.persist(korisnik);
-			return "Uspesno ste se registrovali!";
+			return true;
+			//return "Uspesno ste se registrovali!";
 		}
 	}
 
@@ -53,11 +56,12 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 		TypedQuery<KorisnikTim4>q=em.createNamedQuery("KorisnikTim4.getByUserAndPass",KorisnikTim4.class);
 		q.setParameter("username", username);
 		q.setParameter("password", password);
-		korisnik=q.getSingleResult(); 
-		if(korisnik != null)			
-			return true;
-		else			
+		try {
+			korisnik=q.getSingleResult();
+		} catch (NoResultException nre) {
 			return false;
+		}
+		return true;
 	}
 
 	@Override

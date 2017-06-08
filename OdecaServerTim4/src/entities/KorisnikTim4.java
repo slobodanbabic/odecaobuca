@@ -14,9 +14,9 @@ import javax.persistence.OneToMany;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="KorisnikTim4.getByUsername", query="SELECT k.username FROM KorisnikTim4 k WHERE k.username LIKE :username"),
-	@NamedQuery(name="KorisnikTim4.getByUserAndPass",query="SELECT k FROM KorisnikTim4 k WHERE k.username LIKE :username"
-			+ " AND k.password like :password"),	
+	@NamedQuery(name="KorisnikTim4.getByUsername", query="SELECT k.username FROM KorisnikTim4 k WHERE k.username = :username"),
+	@NamedQuery(name="KorisnikTim4.getByUserAndPass",query="SELECT k FROM KorisnikTim4 k WHERE k.username = :username"
+			+ " AND k.password = :password")
 	
 })
 public class KorisnikTim4 implements Serializable{

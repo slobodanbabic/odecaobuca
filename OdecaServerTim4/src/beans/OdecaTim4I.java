@@ -7,7 +7,7 @@ import entities.PredmetTim4;
 
 public interface OdecaTim4I {
 
-	public String registracija(String ime, String prezime, String email,String username, String password, byte[] avatar);
+	public boolean registracija(String ime, String prezime, String email,String username, String password, byte[] avatar);
 	public boolean login(String username, String password); 
 	public void logout();
 	public void postaviOglas(KategorijaTim4 kategorija, String velicina, String boja, int cena,byte[]slika );

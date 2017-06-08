@@ -1,6 +1,7 @@
 /build/
 # Compiled binaries
 *.class
+.classpath
 
 # Windows specific
 Thumbs.db
