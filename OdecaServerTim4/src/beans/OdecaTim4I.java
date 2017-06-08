@@ -17,11 +17,16 @@ public interface OdecaTim4I {
 	public void prokomentarisiOglas(int idOglas, String komentar);
 	public void odgovoriNaKomentar(int idOglasa, String komentar,int idKorisnika);
 	public List<PredmetTim4> getSviPredmeti();
-	public List<PredmetTim4> getByKategorija(String kategorija);
-	public List<PredmetTim4> getByVelicina(String velicina,String kategorija);	
-	public List<PredmetTim4> getByBoja(String boja,String kategorija);
-	public List<PredmetTim4> getByMaterijal(String matrijal,String kategorija);
-	public List<PredmetTim4> getByMarka(String marka,String kategorija);
+	public List<PredmetTim4> getByKategorija(KategorijaTim4 kategorija);
+	public List<PredmetTim4> getByVelicina(String velicina,KategorijaTim4 kategorija);	
+	public List<PredmetTim4> getByBoja(String boja,KategorijaTim4 kategorija);
+	public List<PredmetTim4> getByMaterijal(String matrijal,KategorijaTim4 kategorija);
+	public List<PredmetTim4> getByMarka(String marka,KategorijaTim4 kategorija);
+	public List<PredmetTim4> getByCena(int cena,KategorijaTim4 kategorija);
 	public List<KategorijaTim4> getKategorije();
 	public List<String> getSveUniqueVelicineByKategorija(KategorijaTim4 kategorija);
+	public List<Integer> getSveUniqueCeneByKategorija(KategorijaTim4 kategorija);
+	public List<String> getSveUniqueBojeByKategorija(KategorijaTim4 kategorija);
+	public List<String> getSveUniqueMaterijalByKategorija(KategorijaTim4 kategorija);
+	public List<String> getSveUniqueMarkalByKategorija(KategorijaTim4 kategorija);
 }

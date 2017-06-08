@@ -18,6 +18,7 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name="PredmetTim4.findByMarka",query="SELECT p FROM PredmetTim4 p WHERE p.marka LIKE :marka AND p.kategorija LIKE :kategorija"),
 	@NamedQuery(name="PredmetTim4.findByMaterijal",query="SELECT p FROM PredmetTim4 p WHERE p.materijal LIKE :materijal AND p.kategorija LIKE :kategorija"),
 	@NamedQuery(name="PredmetTim4.findSviPredmeti",query="SELECT p FROM PredmetTim4 p "),
+	@NamedQuery(name="PredmetTim4.findByCena",query="SELECT p FROM PredmetTim4 p WHERE p.pocetnaCena LIKE :cena AND p.kategorija LIKE :kategorija"),
 	
 	
 	

@@ -168,14 +168,14 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	}
 
 	@Override
-	public List<PredmetTim4> getByKategorija(String kategorija) {
+	public List<PredmetTim4> getByKategorija(KategorijaTim4 kategorija) {
 		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByKategorija", PredmetTim4.class);
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();
 	}
 
 	@Override
-	public List<PredmetTim4> getByVelicina(String velicina, String kategorija) {
+	public List<PredmetTim4> getByVelicina(String velicina, KategorijaTim4 kategorija) {
 		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByVelicina", PredmetTim4.class);
 		q.setParameter("velicina", velicina);
 		q.setParameter("kategorija", kategorija);
@@ -183,7 +183,7 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	}
 
 	@Override
-	public List<PredmetTim4> getByBoja(String boja, String kategorija) {
+	public List<PredmetTim4> getByBoja(String boja, KategorijaTim4 kategorija) {
 		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByBoja", PredmetTim4.class);
 		q.setParameter("boja", boja);
 		q.setParameter("kategorija", kategorija);
@@ -191,7 +191,7 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	}
 
 	@Override
-	public List<PredmetTim4> getByMaterijal(String materijal, String kategorija) {
+	public List<PredmetTim4> getByMaterijal(String materijal, KategorijaTim4 kategorija) {
 		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByMaterijal", PredmetTim4.class);
 		q.setParameter("materijal", materijal);
 		q.setParameter("kategorija", kategorija);
@@ -199,7 +199,7 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	}
 
 	@Override
-	public List<PredmetTim4> getByMarka(String marka, String kategorija) {
+	public List<PredmetTim4> getByMarka(String marka, KategorijaTim4 kategorija) {
 		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByMarka", PredmetTim4.class);
 		q.setParameter("marka", marka);
 		q.setParameter("kategorija", kategorija);
@@ -214,6 +214,43 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	@Override
 	public List<String> getSveUniqueVelicineByKategorija(KategorijaTim4 kategorija) {
 		TypedQuery<String> q =em.createQuery("SELECT DISTINCT(p.velicina) FROM PredmetTim4 p where p.kategorija = :kategorija",String.class);
+		q.setParameter("kategorija", kategorija);
+		return q.getResultList();
+	}
+
+	@Override
+	public List<Integer> getSveUniqueCeneByKategorija(KategorijaTim4 kategorija) {
+		//TypedQuery<Integer> q =em.createQuery("SELECT DISTINCT(o.ponudjenaCena) FROM OglasTim4 o join o.predmet p where p.kategorija = :kategorija",Integer.class);
+		TypedQuery<Integer> q =em.createQuery("SELECT DISTINCT(p.pocetnaCena) FROM PredmetTim4 p where p.kategorija = :kategorija",Integer.class);
+		q.setParameter("kategorija", kategorija);
+		return q.getResultList();
+	}
+
+	@Override
+	public List<String> getSveUniqueBojeByKategorija(KategorijaTim4 kategorija) {
+		TypedQuery<String> q =em.createQuery("SELECT DISTINCT(p.boja) FROM PredmetTim4 p where p.kategorija = :kategorija",String.class);
+		q.setParameter("kategorija", kategorija);
+		return q.getResultList();
+	}
+
+	@Override
+	public List<String> getSveUniqueMaterijalByKategorija(KategorijaTim4 kategorija) {
+		TypedQuery<String> q =em.createQuery("SELECT DISTINCT(p.materijal) FROM PredmetTim4 p where p.kategorija = :kategorija",String.class);
+		q.setParameter("kategorija", kategorija);
+		return q.getResultList();
+	}
+
+	@Override
+	public List<PredmetTim4> getByCena(int cena, KategorijaTim4 kategorija) {
+		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByCena", PredmetTim4.class);
+		q.setParameter("cena", cena);
+		q.setParameter("kategorija", kategorija);
+		return q.getResultList();
+	}
+
+	@Override
+	public List<String> getSveUniqueMarkalByKategorija(KategorijaTim4 kategorija) {
+		TypedQuery<String> q =em.createQuery("SELECT DISTINCT(p.marka) FROM PredmetTim4 p where p.kategorija = :kategorija",String.class);
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();
 	}

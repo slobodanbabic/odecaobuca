@@ -77,6 +77,7 @@ public class OdecaPopuniTim4 {
 		OglasTim4 oglas = new OglasTim4();
 		oglas.setKorisnik(korisnik);
 		oglas.setPredmet(predmet);
+		oglas.setPonudjenaCena(predmet.getPocetnaCena());
 		em.persist(oglas);
 		return oglas;
 	}
