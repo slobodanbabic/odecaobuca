@@ -41,7 +41,7 @@ public class OdecaPopuniTim4 {
 		k.setPrezime(prezime);
 		k.setEmail(email);
 		k.setAvatar(avatar);
-		k.setUsername("username");
+		k.setUsername(username);
 		k.setPassword(password);
 		em.persist(k);
 		return k;
