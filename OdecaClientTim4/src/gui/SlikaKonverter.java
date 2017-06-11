@@ -13,8 +13,8 @@ import javax.imageio.ImageIO;
 
 public class SlikaKonverter {
 	
-	public static byte[] fileToByteArray(String s) throws FileNotFoundException, IOException {
-		FileInputStream fis = new FileInputStream(s);
+	public static byte[] fileToByteArray(String putanja) throws FileNotFoundException, IOException {
+		FileInputStream fis = new FileInputStream(putanja);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		byte[] buf = new byte[255];
 		try {
@@ -26,9 +26,9 @@ public class SlikaKonverter {
 		return bos.toByteArray();
 	}
 
-	public static byte[] extractBytes(String ImageName) throws IOException {
+	public static byte[] extractBytes(String imageName) throws IOException {
 		// open image
-		File imgPath = new File(ImageName);
+		File imgPath = new File(imageName);
 		BufferedImage bufferedImage = ImageIO.read(imgPath);
 
 		// get DataBufferBytes from Raster

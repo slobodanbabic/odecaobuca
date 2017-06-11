@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
@@ -33,15 +34,15 @@ public class KorisnikTim4 implements Serializable{
 	private String password;	
 	
 	//svi oglasi koje je korisnik kreirao
-	@OneToMany(mappedBy = "korisnik")	
-	private List<OglasTim4> ponude;
+	@OneToMany(mappedBy = "korisnik", fetch = FetchType.EAGER)	
+	private List<OglasTim4> licitiraniOglasi;
 	
 	//sva nadmetanja u kojima je korisnik ucestvovao ili jos ucestvuje	
-	@OneToMany
-	private Set<OglasTim4> aukcije;
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<OglasTim4> aukcije;
 	
 	//svi komentari u kojima je korisnik spomenut
-	@OneToMany(mappedBy = "korisnik")	
+	@OneToMany(mappedBy = "korisnik", fetch = FetchType.EAGER)	
 	private List<KomentarTim4> komentari;
 	
 	public KorisnikTim4() {
@@ -81,19 +82,19 @@ public class KorisnikTim4 implements Serializable{
 		this.username = username;
 	}
 
-	public List<OglasTim4> getPonude() {
-		return ponude;
+	public List<OglasTim4> getLicitiraniOglasi() {
+		return licitiraniOglasi;
 	}
 
-	public void setPonude(List<OglasTim4> ponude) {
-		this.ponude = ponude;
+	public void setLicitiraniOglasi(List<OglasTim4> licitiraniOglasi) {
+		this.licitiraniOglasi = licitiraniOglasi;
 	}
 
-	public Set<OglasTim4> getAukcije() {
+	public List<OglasTim4> getAukcije() {
 		return aukcije;
 	}
 
-	public void setAukcije(Set<OglasTim4> aukcije) {
+	public void setAukcije(List<OglasTim4> aukcije) {
 		this.aukcije = aukcije;
 	}
 

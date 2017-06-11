@@ -28,9 +28,11 @@ public class OdecaPopuniTim4 {
 		KorisnikTim4 k2 = dodajKorisnika("Joca", "Jocic", "joca@gmail.com", null, "joca", "joca");
 		KorisnikTim4 k3 = dodajKorisnika("Miki", "Mikic", "mika@gmail.com", null, "mika", "mika");
 
-		PredmetTim4 p1 = dodajPredmet("majica", "S", "crvena", 500, "pamuk", "puma", "polovna dobro ocuvana majica",
-				null);
-		PredmetTim4 p2 = dodajPredmet("pantalone", "36", "teksas", 700, "teksas", "Legend", "Ko novo", null);
+		
+		
+		PredmetTim4 p1 = dodajPredmet("majica", "Majca lacosta", "S", "crvena", 500, "pamuk", "puma", "polovna dobro ocuvana majica", null);
+		PredmetTim4 p2 = dodajPredmet("pantalone", "Pantalone legend", "36", "teksas", 700, "teksas", "Legend", "Ko novo", null);
+		
 		OglasTim4 o1 = dodajOglas(k1, p1);
 		OglasTim4 o2 = dodajOglas(k3, p2);
 
@@ -58,10 +60,14 @@ public class OdecaPopuniTim4 {
 		return k;
 	}
 
-	private PredmetTim4 dodajPredmet(String kategorija, String velicina, String boja, int pocetnaCena, String materijal,
-			String marka, String opis, byte[] slika) {
-		PredmetTim4 p = new PredmetTim4();
+	private PredmetTim4 dodajPredmet(String kategorija, String naslov, String velicina, String boja, int pocetnaCena,
+			String materijal, String marka, String opis, byte[] slika) {
+		PredmetTim4 p = em.find(PredmetTim4.class, 1);
+		if(p != null)
+			return p;
+		p = new PredmetTim4();
 		p.setKategorija(KategorijaTim4.valueOf(kategorija.toUpperCase()));
+		p.setNaslov(naslov);
 		p.setVelicina(velicina);
 		p.setBoja(boja);
 		p.setPocetnaCena(pocetnaCena);
@@ -74,11 +80,26 @@ public class OdecaPopuniTim4 {
 	}
 
 	private OglasTim4 dodajOglas(KorisnikTim4 korisnik, PredmetTim4 predmet) {
-		OglasTim4 oglas = new OglasTim4();
+		OglasTim4 oglas = em.find(OglasTim4.class, 1);
+		if(oglas != null)
+			return oglas;
+		oglas = new OglasTim4();
 		oglas.setKorisnik(korisnik);
 		oglas.setPredmet(predmet);
 		oglas.setPonudjenaCena(predmet.getPocetnaCena());
 		em.persist(oglas);
 		return oglas;
 	}
+	
+	/*public static byte[] extractBytes(String imageName) throws IOException {
+		// open image
+		File imgPath = new File(imageName);
+		BufferedImage bufferedImage = ImageIO.read(imgPath);
+
+		// get DataBufferBytes from Raster
+		WritableRaster raster = bufferedImage.getRaster();
+		DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
+
+		return (data.getData());
+	}*/
 }

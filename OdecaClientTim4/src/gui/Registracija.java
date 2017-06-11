@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -54,12 +55,7 @@ public class Registracija {
 		passwordField = new JPasswordField();
 		passwordField_1 = new JPasswordField();
 		avatar1Icon = new ImageIcon("avatar-default.png");
-		try {
-			remoteEjb = Remote.getRemote();
-		} catch (NamingException ex) {
-			String msg = ex.getClass().getName() + ":\n" + ex.getMessage();
-			System.out.println(msg);
-		}
+		remoteEjb = Remote.getRemote();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 489, 436);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -300,6 +296,7 @@ public class Registracija {
 		passwordVisibleField_1.setBounds(190, 140, 223, 20);
 		mid.add(passwordVisibleField_1);
 		passwordVisibleField_1.setColumns(10);
+		
 
 		btnPotvrdi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -331,10 +328,10 @@ public class Registracija {
 
 					boolean test = remoteEjb.registracija(ime, prezime, eMail, username, pass, niz);
 					if (test) {
-						JOptionPane.showConfirmDialog(null, "Registrovan korisnik");
+						new LoginScreen();
+						frame.setVisible(false);
 					} else {
-						JOptionPane.showMessageDialog(null, "Korisnicko ime " + username
-								+ " vec postoji u bazi! \nPokusajte sa drugim korisnickim imenom.");
+						JOptionPane.showMessageDialog(null, "Username vec postoji");
 					}
 				}
 			}
@@ -343,5 +340,4 @@ public class Registracija {
 		bot.add(btnPotvrdi);
 		frame.setVisible(true);
 	}
-
 }

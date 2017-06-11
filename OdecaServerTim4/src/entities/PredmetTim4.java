@@ -30,6 +30,7 @@ public class PredmetTim4 implements Serializable{
 	@GeneratedValue
 	private int id;	
 	private KategorijaTim4 kategorija;
+	private String naslov;
 	private String velicina;
 	private String boja;
 	private int pocetnaCena;
@@ -114,6 +115,14 @@ public class PredmetTim4 implements Serializable{
 
 	public void setMarka(String marka) {
 		this.marka = marka;
+	}
+
+	public String getNaslov() {
+		return naslov;
+	}
+
+	public void setNaslov(String naslov) {
+		this.naslov = naslov;
 	}
 	
 }

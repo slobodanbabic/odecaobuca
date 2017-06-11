@@ -71,10 +71,11 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	}
 
 	@Override
-	public void postaviOglas(KategorijaTim4 kategorija, String velicina, String boja, int cena, byte[] slika) {
+	public void postaviOglas(KorisnikTim4 korisnik, KategorijaTim4 kategorija, String naslov, String velicina, String boja, int cena, byte[] slika) {
 		if (korisnik != null){
 			PredmetTim4 predmet = new PredmetTim4();
 			predmet.setKategorija(kategorija);
+			predmet.setNaslov(naslov);
 			predmet.setVelicina(velicina);
 			predmet.setBoja(boja);
 			predmet.setPocetnaCena(cena);
@@ -84,7 +85,10 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 			OglasTim4 oglas = new OglasTim4();
 			oglas.setKorisnik(korisnik);
 			oglas.setPredmet(predmet);
-			em.persist(oglas);			
+			em.persist(oglas);
+			
+			korisnik.getAukcije().add(oglas);
+			em.merge(korisnik);
 		}
 		
 	}
@@ -96,6 +100,9 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 			if(oglas.getKorisnik().getUsername() != korisnik.getUsername()){
 				if(oglas.getPonudjenaCena() < novaCena){
 					oglas.setPonudjenaCena(novaCena);
+					korisnik.getLicitiraniOglasi().add(oglas);
+					em.merge(oglas);
+					em.merge(korisnik);
 					return true;
 				}
 			}				
@@ -162,45 +169,45 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	}
 
 	@Override
-	public List<PredmetTim4> getSviPredmeti() {
-		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findSviPredmeti", PredmetTim4.class);		
+	public List<OglasTim4> getSviPredmeti() {
+		TypedQuery<OglasTim4> q = em.createNamedQuery("OglasTim4.findSviPredmeti", OglasTim4.class);		
 		return q.getResultList();
 	}
 
 	@Override
-	public List<PredmetTim4> getByKategorija(KategorijaTim4 kategorija) {
-		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByKategorija", PredmetTim4.class);
+	public List<OglasTim4> getByKategorija(KategorijaTim4 kategorija) {
+		TypedQuery<OglasTim4> q = em.createNamedQuery("OglasTim4.findByKategorija", OglasTim4.class);
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();
 	}
 
 	@Override
-	public List<PredmetTim4> getByVelicina(String velicina, KategorijaTim4 kategorija) {
-		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByVelicina", PredmetTim4.class);
+	public List<OglasTim4> getByVelicina(String velicina, KategorijaTim4 kategorija) {
+		TypedQuery<OglasTim4> q = em.createNamedQuery("OglasTim4.findByVelicina", OglasTim4.class);
 		q.setParameter("velicina", velicina);
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();
 	}
 
 	@Override
-	public List<PredmetTim4> getByBoja(String boja, KategorijaTim4 kategorija) {
-		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByBoja", PredmetTim4.class);
+	public List<OglasTim4> getByBoja(String boja, KategorijaTim4 kategorija) {
+		TypedQuery<OglasTim4> q = em.createNamedQuery("OglasTim4.findByBoja", OglasTim4.class);
 		q.setParameter("boja", boja);
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();
 	}
 
 	@Override
-	public List<PredmetTim4> getByMaterijal(String materijal, KategorijaTim4 kategorija) {
-		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByMaterijal", PredmetTim4.class);
+	public List<OglasTim4> getByMaterijal(String materijal, KategorijaTim4 kategorija) {
+		TypedQuery<OglasTim4> q = em.createNamedQuery("OglasTim4.findByMaterijal", OglasTim4.class);
 		q.setParameter("materijal", materijal);
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();
 	}
 
 	@Override
-	public List<PredmetTim4> getByMarka(String marka, KategorijaTim4 kategorija) {
-		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByMarka", PredmetTim4.class);
+	public List<OglasTim4> getByMarka(String marka, KategorijaTim4 kategorija) {
+		TypedQuery<OglasTim4> q = em.createNamedQuery("OglasTim4.findByMarka", OglasTim4.class);
 		q.setParameter("marka", marka);
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();
@@ -220,8 +227,8 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 
 	@Override
 	public List<Integer> getSveUniqueCeneByKategorija(KategorijaTim4 kategorija) {
-		//TypedQuery<Integer> q =em.createQuery("SELECT DISTINCT(o.ponudjenaCena) FROM OglasTim4 o join o.predmet p where p.kategorija = :kategorija",Integer.class);
-		TypedQuery<Integer> q =em.createQuery("SELECT DISTINCT(p.pocetnaCena) FROM PredmetTim4 p where p.kategorija = :kategorija",Integer.class);
+		TypedQuery<Integer> q =em.createQuery("SELECT DISTINCT(o.ponudjenaCena) FROM OglasTim4 o where o.predmet.kategorija = :kategorija",Integer.class);
+		//TypedQuery<Integer> q =em.createQuery("SELECT DISTINCT(p.pocetnaCena) FROM PredmetTim4 p where p.kategorija = :kategorija",Integer.class);
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();
 	}
@@ -241,8 +248,8 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 	}
 
 	@Override
-	public List<PredmetTim4> getByCena(int cena, KategorijaTim4 kategorija) {
-		TypedQuery<PredmetTim4> q = em.createNamedQuery("PredmetTim4.findByCena", PredmetTim4.class);
+	public List<OglasTim4> getByCena(int cena, KategorijaTim4 kategorija) {
+		TypedQuery<OglasTim4> q = em.createNamedQuery("OglasTim4.findByCena", OglasTim4.class);
 		q.setParameter("cena", cena);
 		q.setParameter("kategorija", kategorija);
 		return q.getResultList();

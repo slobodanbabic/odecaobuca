@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 
-import javax.naming.NamingException;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -38,7 +37,6 @@ public class LoginScreen extends JFrame {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 
-	private static OdecaTim4I remoteEjb;
 	private JTextField passwordVisibleField;
 
 	/**
@@ -48,40 +46,40 @@ public class LoginScreen extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginScreen frame = new LoginScreen();
-					frame.setVisible(true);
+					new LoginScreen();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public LoginScreen() {
+	public LoginScreen() {		
+		
+		setLocationRelativeTo(null);
 		setVisible(true);
-		try {
-			remoteEjb = Remote.getRemote();
-		} catch(NamingException ex) {
-			String msg = ex.getClass().getName() + ":\n" + ex.getMessage();
-			System.out.println(msg);
-		}
+		
 		setResizable(false);
 		setForeground(Color.DARK_GRAY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 444, 169);
+		setSize(444, 169);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
+		
+		//posto povezivanje sa udaljnim serverom moze da potraje, izvrsavamo u posebnoj niti
+				new Thread( () -> Remote.getRemote() ).start();
+				
 		JLabel lblDobrodosliUnesitePodatke = new JLabel("Dobrodošli, unesite podatke:");
 		lblDobrodosliUnesitePodatke.setBounds(24, 12, 398, 15);
 		contentPane.add(lblDobrodosliUnesitePodatke);
 
-		JLabel lblMolimVasPopunite = new JLabel("Pogrešno ste uneli korisničko ime ili lozinku.");
+		JLabel lblMolimVasPopunite = new JLabel("Pogrešno ste uneli korisnièko ime ili lozinku.");
 		lblMolimVasPopunite.setVisible(false);
 		lblMolimVasPopunite.setForeground(Color.RED);
 		lblMolimVasPopunite.setBounds(24, 82, 398, 15);
@@ -115,7 +113,7 @@ public class LoginScreen extends JFrame {
 				lblMolimVasPopunite.setVisible(false);
 				String username = usernameField.getText();
 				String password = passwordCheckBox.isSelected() ? passwordVisibleField.getText() : new String(passwordField.getPassword());
-				KorisnikTim4 korisnik = remoteEjb.login(username, password);
+				KorisnikTim4 korisnik = Remote.getRemote().login(username, password);
 				if (korisnik != null) {
 					new OglasiProfil(korisnik);
 					setVisible(false);
