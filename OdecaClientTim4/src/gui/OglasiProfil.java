@@ -30,6 +30,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.DefaultListCellRenderer;
 
 import javax.swing.SwingUtilities;
@@ -292,7 +294,7 @@ public class OglasiProfil {
 		right.add(btnFIltriraj, gbc_btnFIltriraj);
 			
 		
-		JList<OglasTim4> list = new JList<OglasTim4>(new Vector<OglasTim4>(k.getMojiOglasi()));		
+		 list = new JList<OglasTim4>(new Vector<OglasTim4>(k.getMojiOglasi()));		
 		 list.setCellRenderer(new DefaultListCellRenderer() {
 	            @Override
 	            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -304,6 +306,17 @@ public class OglasiProfil {
 	                return renderer;
 	            }
 	        });
+		 list.addListSelectionListener(new ListSelectionListener() {			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				JPanel prikazOglasa = napraviOglas(list.getSelectedValue());
+				mid.removeAll();
+				mid.add(prikazOglasa);
+				frame.validate();
+				frame.repaint();
+				
+			}
+		});
 		JScrollPane listScroller = new JScrollPane(list);
 		GridBagConstraints gbc_list = new GridBagConstraints();
 		gbc_list.insets = new Insets(0, 0, 5, 0);
