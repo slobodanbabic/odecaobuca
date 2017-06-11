@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,9 +26,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.DefaultListCellRenderer;
+
+import javax.swing.SwingUtilities;
 
 import beans.OdecaTim4I;
 import entities.KategorijaTim4;
@@ -44,11 +50,13 @@ public class OglasiProfil {
 	private List<OglasTim4> oglasi;
 	private JTextField textFieldKomentar;
 	private JTextField txtUnesiteIznos;
+	private JList<OglasTim4> list;
 
 	public OglasiProfil(KorisnikTim4 k) {
 		initialize(k);
 	}
 
+	@SuppressWarnings("serial")
 	private void initialize(KorisnikTim4 k) {
 		comboBoxKategorije = new JComboBox<>();
 		remoteEjb = Remote.getRemote();
@@ -282,8 +290,21 @@ public class OglasiProfil {
 		gbc_btnFIltriraj.gridx = 0;
 		gbc_btnFIltriraj.gridy = 5;
 		right.add(btnFIltriraj, gbc_btnFIltriraj);
-
-		JList<String> list = new JList();
+			
+		
+		JList<OglasTim4> list = new JList<OglasTim4>(new Vector<OglasTim4>(k.getMojiOglasi()));		
+		 list.setCellRenderer(new DefaultListCellRenderer() {
+	            @Override
+	            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+	                if (renderer instanceof JLabel && value instanceof OglasTim4) {	                   
+	                    ((JLabel) renderer).setText(((OglasTim4) value).getPredmet().getNaslov());
+	                    ((JLabel) renderer).setText(((OglasTim4) value).getPredmet().getNaslov());
+	                }
+	                return renderer;
+	            }
+	        });
+		JScrollPane listScroller = new JScrollPane(list);
 		GridBagConstraints gbc_list = new GridBagConstraints();
 		gbc_list.insets = new Insets(0, 0, 5, 0);
 		gbc_list.fill = GridBagConstraints.BOTH;
@@ -472,17 +493,17 @@ public class OglasiProfil {
 
 		JButton btnLicitiraj = new JButton("Licitiraj");
 		btnLicitiraj.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					int licitacija = Integer.parseInt(txtUnesiteIznos.getText());
 					if(Remote.getRemote().ponudiCenu(o.getId(), licitacija))
-						JOptionPane.showMessageDialog(null, "Uspesno ste licitirali!");
+						
+						JOptionPane.showMessageDialog(null, "Uspesno ste licitirali!");						
 					else
 						JOptionPane.showMessageDialog(null, "Cena je manja od ponudjene!");
 				} catch (NumberFormatException nfe) {
-					JOptionPane.showMessageDialog(null, "Niste uneli odgovarajuÄ‡i iznos!");
+					JOptionPane.showMessageDialog(null, "Niste uneli odgovarajuæi iznos!");
 				}
 			}
 			

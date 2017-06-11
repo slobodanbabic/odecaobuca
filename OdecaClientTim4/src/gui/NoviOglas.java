@@ -67,7 +67,7 @@ public class NoviOglas extends JFrame {
 	public NoviOglas(KorisnikTim4 korisnik) {
 		setVisible(true);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		setBounds(100, 100, 749, 619);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

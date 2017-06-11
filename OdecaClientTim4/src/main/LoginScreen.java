@@ -61,7 +61,7 @@ public class LoginScreen extends JFrame {
 	public LoginScreen() {		
 		
 		setLocationRelativeTo(null);
-		setVisible(true);
+		
 		
 		setResizable(false);
 		setForeground(Color.DARK_GRAY);
@@ -75,7 +75,7 @@ public class LoginScreen extends JFrame {
 		//posto povezivanje sa udaljnim serverom moze da potraje, izvrsavamo u posebnoj niti
 				new Thread( () -> Remote.getRemote() ).start();
 				
-		JLabel lblDobrodosliUnesitePodatke = new JLabel("Dobrodo≈°li, unesite podatke:");
+		JLabel lblDobrodosliUnesitePodatke = new JLabel("Dobrodoöli, unesite podatke:");
 		lblDobrodosliUnesitePodatke.setBounds(24, 12, 398, 15);
 		contentPane.add(lblDobrodosliUnesitePodatke);
 
@@ -189,7 +189,7 @@ public class LoginScreen extends JFrame {
 		lblNapraviNoviNalog.setForeground(Color.BLUE);
 		lblNapraviNoviNalog.setBounds(24, 100, 165, 15);
 		contentPane.add(lblNapraviNoviNalog);
-		
+		setVisible(true);
 	}
 
 }

@@ -87,21 +87,21 @@ public class OdecaEjbTim4 implements OdecaTim4I{
 			oglas.setPredmet(predmet);
 			em.persist(oglas);
 			
-			korisnik.getAukcije().add(oglas);
+			korisnik.getMojiOglasi().add(oglas);
 			em.merge(korisnik);
 		}
 		
 	}
 
 	@Override
-	public boolean ponudiCenu(int idOglasa, int novaCena) {
+	public boolean ponudiCenu(int idOglasa, int novaCena) {		
 		if(korisnik != null){
 			OglasTim4 oglas = em.find(OglasTim4.class, idOglasa);
 			if(oglas.getKorisnik().getUsername() != korisnik.getUsername()){
 				if(oglas.getPonudjenaCena() < novaCena){
 					oglas.setPonudjenaCena(novaCena);
-					korisnik.getLicitiraniOglasi().add(oglas);
 					em.merge(oglas);
+					korisnik.getAukcije().add(oglas);					
 					em.merge(korisnik);
 					return true;
 				}

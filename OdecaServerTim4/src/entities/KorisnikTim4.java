@@ -35,7 +35,7 @@ public class KorisnikTim4 implements Serializable{
 	
 	//svi oglasi koje je korisnik kreirao
 	@OneToMany(mappedBy = "korisnik", fetch = FetchType.EAGER)	
-	private List<OglasTim4> licitiraniOglasi;
+	private List<OglasTim4> mojiOglasi;
 	
 	//sva nadmetanja u kojima je korisnik ucestvovao ili jos ucestvuje	
 	@OneToMany(fetch = FetchType.EAGER)
@@ -82,12 +82,12 @@ public class KorisnikTim4 implements Serializable{
 		this.username = username;
 	}
 
-	public List<OglasTim4> getLicitiraniOglasi() {
-		return licitiraniOglasi;
+	public List<OglasTim4> getMojiOglasi() {
+		return mojiOglasi;
 	}
 
-	public void setLicitiraniOglasi(List<OglasTim4> licitiraniOglasi) {
-		this.licitiraniOglasi = licitiraniOglasi;
+	public void setMojiiOglasi(List<OglasTim4> licitiraniOglasi) {
+		this.mojiOglasi = licitiraniOglasi;
 	}
 
 	public List<OglasTim4> getAukcije() {
